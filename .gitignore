@@ -1,0 +1,18 @@
+# Banco vetorial
+vector_db/
+
+# Ambiente virtual
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Variáveis
+.env
+
+# VS Code
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
