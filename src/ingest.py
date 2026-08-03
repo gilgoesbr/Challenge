@@ -1,33 +1,33 @@
+"""
+Módulo responsável pela ingestão de documentos PDF.
+"""
+
 from pathlib import Path
+
 from langchain_community.document_loaders import PyPDFDirectoryLoader
+from langchain_core.documents import Document
 
 
 class PDFIngestor:
-    def __init__(self, pdf_directory: str):
+    """
+    Responsável por carregar documentos PDF de um diretório.
+    """
+
+    def __init__(self, pdf_directory: str | Path):
         self.pdf_directory = Path(pdf_directory)
 
-    def load_documents(self):
+    def load_documents(self) -> list[Document]:
+        """
+        Carrega todos os PDFs encontrados no diretório.
+
+        Returns:
+            list[Document]: Lista de documentos carregados.
+        """
+
+        if not self.pdf_directory.exists():
+            raise FileNotFoundError(
+                f"Diretório não encontrado: {self.pdf_directory}"
+            )
+
         loader = PyPDFDirectoryLoader(str(self.pdf_directory))
-        documents = loader.load()
-
-        print(f"{len(documents)} páginas carregadas.")
-
-        return documents
-
-
-if __name__ == "__main__":
-
-    pdf_path = Path(__file__).parent.parent / "docs" / "pdfs"
-
-    ingestor = PDFIngestor(pdf_path)
-
-    documents = ingestor.load_documents()
-
-    print("=" * 60)
-    print(f"Total de páginas: {len(documents)}")
-    print("=" * 60)
-
-    for i, doc in enumerate(documents[:3], start=1):
-        print(f"\nPágina {i}")
-        print("-" * 40)
-        print(doc.page_content[:300])
+        return loader.load()
